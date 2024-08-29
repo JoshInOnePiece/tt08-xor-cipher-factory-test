@@ -92,6 +92,7 @@ async def test_project(dut):
         await ClockCycles(dut.iClk, 1)
         assert dut.uo_out.value == i
 
+        
     # When under reset: Output is uio_in, uio is in input mode
     dut.rst_n.value = 0
     await ClockCycles(dut.iClk, 1)
