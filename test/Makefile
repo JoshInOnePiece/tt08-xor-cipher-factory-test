@@ -5,13 +5,18 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = tt_um_factory_test.v
+PROJECT_SOURCES = tt_um_franco_xor_top.v
 
 ifneq ($(GATES),yes)
 
 # RTL simulation:
 SIM_BUILD				= sim_build/rtl
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
+VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,assemble_key.v)
+VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,clock_divider.v)
+VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,deserializer.v)
+VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,serialize.v)
+VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,xor_encrypt.v)
 COMPILE_ARGS 		+= -I$(SRC_DIR)
 
 else
