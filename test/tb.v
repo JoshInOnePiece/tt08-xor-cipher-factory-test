@@ -32,7 +32,7 @@ module tb();
 
         .iEn(iEn),
         .iData_in(iData_in),
-        .iClk(iClk),
+        .clk(iClk),
         .iRst(iRst),
         .iLoad_key(iLoad_key),
         .iLoad_msg(iLoad_msg),

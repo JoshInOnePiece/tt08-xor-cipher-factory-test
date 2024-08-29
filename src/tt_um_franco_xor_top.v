@@ -1,7 +1,7 @@
 module tt_um_franco_xor_top(
     input iEn,
     input iData_in,
-    input iClk,
+    input clk,
     input iRst,
     input iLoad_key,
     input iLoad_msg,
@@ -24,7 +24,7 @@ module tt_um_franco_xor_top(
 
     // Instantiate clock divider
     clock_divider half_clock(
-        .iClk(iClk),
+        .clk(clk),
         .iRst(iRst),
         .oClk_slow(oClk_slow)
     );
@@ -33,7 +33,7 @@ module tt_um_franco_xor_top(
     deserializer #(.DATA_SIZE(4)) deserialize_key (
         .iEn(iEn),
         .iData_in(iData_in),
-        .iClk(oClk_slow),
+        .clk(oClk_slow),
         .iRst(iRst),
         .iLoading(iLoad_key),
         .oData(key),
@@ -44,7 +44,7 @@ module tt_um_franco_xor_top(
     deserializer #(.DATA_SIZE(8)) deserialize_message (
         .iEn(iEn),
         .iData_in(iData_in),
-        .iClk(oClk_slow),
+        .clk(oClk_slow),
         .iRst(iRst),
         .iLoading(iLoad_msg),
         .oData(message),
@@ -55,7 +55,7 @@ module tt_um_franco_xor_top(
     assemble_key #(.KEY_SIZE(4), .MSG_SIZE(8)) key_assembler (
         .iEn(iEn),
         .iAssemble(key_bit),
-        .iClk(oClk_slow),
+        .clk(oClk_slow),
         .iRst(iRst),
         .iKey(key),
         .oKey_Assembled(assembled_key),
@@ -64,7 +64,7 @@ module tt_um_franco_xor_top(
     
     xor_encrypt #(.MSG_SIZE(8)) xor_module (
         .iEn(iEn),
-        .iClk(oClk_slow),
+        .clk(oClk_slow),
         .iRst(iRst),
         .iEncrypt(oAssembled),
         .iKey_Assembled(assembled_key),
@@ -74,7 +74,7 @@ module tt_um_franco_xor_top(
     );
     
     serialize #(.MSG_SIZE(8)) serializer_message(
-        .iClk(oClk_slow),
+        .clk(oClk_slow),
         .iEn(iEn),
         .iRst(iRst),
         .iEncrypt_Done(oEncrypt_flag),
