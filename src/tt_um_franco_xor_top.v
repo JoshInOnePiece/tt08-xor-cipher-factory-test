@@ -13,8 +13,8 @@ module tt_um_franco_xor_top(
     input clk,              //ESP32 Input Clock
     input ena,
     input rst_n,
-    input  [2:0] ui_in,
-    output [2:0] uo_out
+    input  [7:0] ui_in,
+    output [7:0] uo_out
 
 );
 
@@ -31,6 +31,20 @@ wire [$clog2(512) : 0] key_assemble_counter;
 wire iRst;
 wire can_encrypt;
 wire encrypt_done;
+
+//Unused pins to prevent linter warnings
+wire _unused_pins = ui_in[3];
+wire _unused_pins = ui_in[4];
+wire _unused_pins = ui_in[5];
+wire _unused_pins = ui_in[6];
+wire _unused_pins = ui_in[7];
+wire _unused_pins = uo_in[3];
+wire _unused_pins = uo_in[4];
+wire _unused_pins = uo_in[5];
+wire _unused_pins = uo_in[6];
+wire _unused_pins = uo_in[7];
+
+
 
 assign iRst = ~rst_n;
 
