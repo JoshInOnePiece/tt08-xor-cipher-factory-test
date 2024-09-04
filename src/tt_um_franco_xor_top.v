@@ -37,13 +37,9 @@ wire can_encrypt;
 wire encrypt_done;
 
 //Unused pins to prevent linter warnings
-wire _unused_pins = ui_in[7:3];
-wire _unused_pins = uo_in[7:3];
-wire _unused_pins = uio_in[7:0];
-wire _unused_pins = uio_out[7:0];
-wire _unused_pins = uio_oe[7:0];
-
-
+wire _unused_pins = &{{3'b000,ui_in[7:3,]},{3'b000,uo_in[7:3,]},uio_in[7:0],};
+assign uio_out = 0;
+assign uio_oe = 0;
 
 assign iRst = ~rst_n;
 
