@@ -15,7 +15,10 @@ module tt_um_franco_xor_top(
     input rst_n,
     input  [7:0] ui_in,
     output [7:0] uo_out,
-    input [7:0] uio_in
+    
+    input [7:0] uio_in,
+    output [7:0] uio_out,
+    output [7:0] uio_oe
 
 );
 
@@ -51,6 +54,20 @@ wire _unused_pins = uio_in[4];
 wire _unused_pins = uio_in[5];
 wire _unused_pins = uio_in[6];
 wire _unused_pins = uio_in[7];
+wire _unused_pins = uio_out[1];
+wire _unused_pins = uio_out[2];
+wire _unused_pins = uio_out[3];
+wire _unused_pins = uio_out[4];
+wire _unused_pins = uio_out[5];
+wire _unused_pins = uio_out[6];
+wire _unused_pins = uio_out[7];
+wire _unused_pins = uio_oe[1];
+wire _unused_pins = uio_oe[2];
+wire _unused_pins = uio_oe[3];
+wire _unused_pins = uio_oe[4];
+wire _unused_pins = uio_oe[5];
+wire _unused_pins = uio_oe[6];
+wire _unused_pins = uio_oe[7];
 
 
 
