@@ -1,93 +1,84 @@
-module tt_um_franco_xor_top(
-    input iEn,
-    input iData_in,
-    input clk,
-    input iRst,
-    input iLoad_key,
-    input iLoad_msg,
-    output oClk_slow,
-    output reg oData_out,
-    output oDone_flag
+module xor_encryption_top(
+    input iSerial_in,       // Serial DATA in
+    input iClk,             // ESP32 Input Clock.
+    input iRst,             // Active low reset.
+    input iEn,              // Enable Pin
+    input iLoad_key,        // Key load flag.
+    input iLoad_msg,        // Message load flag.
+
+    output oSerial_out,
+    output oSerial_start,
+    output oSerial_end
 );
 
-    // Internal registers
-    wire [3:0] key;
-    wire [7:0] message;
-    wire [7:0] assembled_key;
-    wire [7:0] ciphertext;
-    
-    wire key_bit;
-    wire message_bit;
-    wire oAssembled;
-    wire oEncrypt_flag;
-    wire serial_out;
+// Key and message wires
+wire [31  : 0] oKey;
+wire [511 : 0] oMessage;
+wire [511 : 0] oAssembled_key;
+wire [511 : 0] oCiphertext;
 
-    // Instantiate clock divider
-    clock_divider half_clock(
-        .clk(clk),
-        .iRst(iRst),
-        .oClk_slow(oClk_slow)
-    );
+wire [$clog2(32)  : 0] bit_counter_key;
+wire [$clog2(512) : 0] bit_counter_message;
+wire [$clog2(512) : 0] key_assemble_counter;
 
-    // Instantiate deserializer for the key
-    deserializer #(.DATA_SIZE(4)) deserialize_key (
-        .iEn(iEn),
-        .iData_in(iData_in),
-        .clk(oClk_slow),
-        .iRst(iRst),
-        .iLoading(iLoad_key),
-        .oData(key),
-        .oDone_flag(key_bit)
-    );
+wire can_encrypt;
+wire encrypt_done;
 
-    // Instantiate deserializer for the message
-    deserializer #(.DATA_SIZE(8)) deserialize_message (
-        .iEn(iEn),
-        .iData_in(iData_in),
-        .clk(oClk_slow),
-        .iRst(iRst),
-        .iLoading(iLoad_msg),
-        .oData(message),
-        .oDone_flag(message_bit)
-    );
+// Instantiate the key deserializer module
+deserializer #(.DATA_SIZE(32)) deserializer_key (
+    .iClk(iClk),
+    .iRst(iRst),
+    .iEn(iEn),
+    .iData_in(iSerial_in),
+    .iLoading(iLoad_key),
+    .oData(oKey),
+    .oBit_counter(bit_counter_key)  // Correctly assign the key bit counter
+);
 
-    // Instantiate key assembler
-    assemble_key #(.KEY_SIZE(4), .MSG_SIZE(8)) key_assembler (
-        .iEn(iEn),
-        .iAssemble(key_bit),
-        .clk(oClk_slow),
-        .iRst(iRst),
-        .iKey(key),
-        .oKey_Assembled(assembled_key),
-        .oAssembled(oAssembled)
-    );
-    
-    xor_encrypt #(.MSG_SIZE(8)) xor_module (
-        .iEn(iEn),
-        .clk(oClk_slow),
-        .iRst(iRst),
-        .iEncrypt(oAssembled),
-        .iKey_Assembled(assembled_key),
-        .iMessage(message),
-        .oCiphertext(ciphertext),
-        .oEncrypt_flag(oEncrypt_flag)
-    );
-    
-    serialize #(.MSG_SIZE(8)) serializer_message(
-        .clk(oClk_slow),
-        .iEn(iEn),
-        .iRst(iRst),
-        .iEncrypt_Done(oEncrypt_flag),
-        .iCiphertext(ciphertext),
-        .oData(serial_out),
-        .oDone_flag(oDone_flag)
-    );
+// Instantiate the message deserializer module
+deserializer #(.DATA_SIZE(512)) deserializer_message (
+    .iClk(iClk),
+    .iRst(iRst),
+    .iEn(iEn),
+    .iData_in(iSerial_in),
+    .iLoading(iLoad_msg),
+    .oData(oMessage),
+    .oBit_counter(bit_counter_message)  // Correctly assign the message bit counter
+);
 
-always @(posedge oClk_slow or negedge iRst) begin
-    if (!iRst) begin 
-        oData_out <= 0;
-    end else if (oDone_flag && iEn) begin
-        oData_out <= serial_out;
-    end
-end
+// Instantiate the key assembler module
+key_assembler key_assembler_inst (
+    .iClk(iClk),
+    .iRst(iRst),
+    .iKey(oKey),
+    .iBit_counter_key(bit_counter_key),
+    .oAssembled_key(oAssembled_key),
+    .oKey_assemble_counter(key_assemble_counter),
+    .oCan_encrypt(can_encrypt)
+);
+
+// Instantiate the XOR encryption module
+xor_encrypt #(.KEY_SIZE(32), .MSG_SIZE(512)) xor_encryptor (
+    .iClk(iClk),
+    .iRst(iRst),
+    .iCan_encrypt(can_encrypt),  
+    .iKey(oAssembled_key),       
+    .iMessage(oMessage),         
+    .iKey_assemble_counter(key_assemble_counter),
+    .iMessage_counter(bit_counter_message),
+    .oCiphertext(oCiphertext),   
+    .oEncrypt_done(encrypt_done)
+);
+
+// Instantiate the serializer module
+serialize #(.MSG_SIZE(512)) serialize_output (
+    .iClk(iClk),
+    .iRst(iRst),
+    .iEncrypt_done(encrypt_done),
+    .iCiphertext(oCiphertext),
+    .oSerial_out(oSerial_out),
+    .oSerial_start(oSerial_start),
+    .oSerial_end(oSerial_end)
+);
+
 endmodule

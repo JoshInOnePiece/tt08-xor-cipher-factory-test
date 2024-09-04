@@ -1,23 +1,22 @@
-module xor_encrypt #(parameter MSG_SIZE = 8)(
-    input iEn,
+module xor_encrypt #(parameter KEY_SIZE = 32, parameter MSG_SIZE = 512)(
     input iClk,
     input iRst,
-    input iEncrypt,
-    input [MSG_SIZE - 1:0]iKey_Assembled,
-    input [MSG_SIZE - 1:0]iMessage,
+    input iCan_encrypt,
+    input [MSG_SIZE - 1:0] iKey,
+    input [MSG_SIZE - 1:0] iMessage,
+    input [$clog2(512):0 ] iMessage_counter,
+    input [$clog2(512):0 ] iKey_assemble_counter,
     output reg [MSG_SIZE - 1:0] oCiphertext,
-    output reg oEncrypt_flag
-    );
-    
+    output reg oEncrypt_done
+);
+
 always @(posedge iClk or negedge iRst) begin
     if (!iRst) begin
-        oCiphertext <= 0;
-        oEncrypt_flag <= 0;
-    end else if (iEncrypt && iEn) begin
-        oCiphertext <= iMessage ^ iKey_Assembled;
-        oEncrypt_flag <=1;
-    end else begin
-            oCiphertext <= oCiphertext;
+        oCiphertext   <= 0;
+        oEncrypt_done <= 0;
+    end else if (iCan_encrypt && iMessage_counter == MSG_SIZE && iKey_assemble_counter == MSG_SIZE && !oEncrypt_done) begin
+        oCiphertext <= iMessage ^ iKey;
+        oEncrypt_done <= 1;  // Latches once encryption is done
     end
-end    
+end
 endmodule

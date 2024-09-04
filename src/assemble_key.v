@@ -1,31 +1,30 @@
-module assemble_key #(parameter KEY_SIZE = 4, parameter MSG_SIZE = 8)(
-    input iEn,
-    input iAssemble,
+module key_assembler (
     input iClk,
     input iRst,
-    input [KEY_SIZE - 1:0] iKey,
-    output reg [MSG_SIZE - 1:0] oKey_Assembled,
-    output reg oAssembled
+    input [31 : 0] iKey,
+    input [$clog2(32) :0] iBit_counter_key,
+    output reg [511 : 0] oAssembled_key,
+    output reg [9   : 0] oKey_assemble_counter,
+    output reg oCan_encrypt
 );
 
-reg [($clog2(MSG_SIZE+1))-1:0] bit_counter;
-
-always @(posedge iClk or negedge iRst) begin
-    if (!iRst) begin
-        oKey_Assembled <= 0;
-        bit_counter <= 0;
-        oAssembled <= 0;
-    end else if (iEn && iAssemble) begin
-        if (bit_counter < MSG_SIZE) begin
-            oKey_Assembled <= {oKey_Assembled[MSG_SIZE-KEY_SIZE-1:0], iKey}; // Shift in the key
-            bit_counter <= bit_counter + KEY_SIZE;
-        end else if (bit_counter >= MSG_SIZE) begin
-            oAssembled <= 1;
-        end
-    end else if (oAssembled && bit_counter >= MSG_SIZE) begin
-            oAssembled <= 0;
-            oKey_Assembled <= 0;
-            bit_counter <= 0;
+    always @(posedge iClk or negedge iRst) begin    
+        if (!iRst) begin
+            oKey_assemble_counter <= 0;
+            oCan_encrypt <= 0;
+            oAssembled_key <= 0;
+        end else begin
+            if (iBit_counter_key == 32) begin
+                // Assemble the key in 512-bit register by assigning each 32-bit segment
+                if (oKey_assemble_counter < 512) begin
+                    oAssembled_key[oKey_assemble_counter +: 32] <= iKey;  // Assign 32 bits at a time
+                    oKey_assemble_counter <= oKey_assemble_counter + 32;
+                end
+                
+                if (oKey_assemble_counter >= 512) begin
+                    oCan_encrypt <= 1;
+                end
+            end
         end
     end
 endmodule

@@ -1,28 +1,32 @@
-module serialize #(parameter MSG_SIZE = 8)(
-    input iClk,      // half_clock
-    input iEn,
-    input iRst,      // reset signal
-    input iEncrypt_Done,
-    input [MSG_SIZE - 1:0] iCiphertext,  // serial data in.
-    output reg oData,
-    output reg oDone_flag
-    );
-integer bit_counter;
-    
-always @(posedge iClk or negedge iRst) begin
-    if (!iRst) begin     
-        oData <= 0;
-        oDone_flag <= 0;
-        bit_counter <= 0;
-    end else if (iEncrypt_Done && iEn) begin
-            oData <= iCiphertext[bit_counter];
-            bit_counter <= bit_counter + 1;
+module serialize #(parameter MSG_SIZE = 512)(
+    input iClk,
+    input iRst,
+    input iEncrypt_done,
+    input [MSG_SIZE - 1:0] iCiphertext,
+    output reg oSerial_out,
+    output reg oSerial_start,
+    output reg oSerial_end
+);
 
-        if (bit_counter == MSG_SIZE - 1) begin
-            oDone_flag <= 1;
-        end else begin
-        oDone_flag <= 0; // Optional: Reset flag when not enabled
+integer serial_counter;
+
+always @(posedge iClk or negedge iRst) begin
+    if (!iRst) begin
+        oSerial_out   <= 0;   
+        oSerial_start <= 0; 
+        oSerial_end   <= 0;    
+        serial_counter <= MSG_SIZE - 1;  // Initialize counter to start from MSB
+    end else if (iEncrypt_done && serial_counter >= 0) begin
+        oSerial_start <= 1;  // Start serializing
+        oSerial_out <= iCiphertext[serial_counter];  // Output current bit
+        
+        if (serial_counter > 0) begin
+            serial_counter <= serial_counter - 1;  // Decrement counter
+        end else if (serial_counter == 0) begin
+            oSerial_end <= 1;  // Signal the end of serialization
+            serial_counter <= -1;  // Prevent further decrementing
         end
     end
 end
+
 endmodule
