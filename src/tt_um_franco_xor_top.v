@@ -37,37 +37,11 @@ wire can_encrypt;
 wire encrypt_done;
 
 //Unused pins to prevent linter warnings
-wire _unused_pins = ui_in[3];
-wire _unused_pins = ui_in[4];
-wire _unused_pins = ui_in[5];
-wire _unused_pins = ui_in[6];
-wire _unused_pins = ui_in[7];
-wire _unused_pins = uo_in[3];
-wire _unused_pins = uo_in[4];
-wire _unused_pins = uo_in[5];
-wire _unused_pins = uo_in[6];
-wire _unused_pins = uo_in[7];
-wire _unused_pins = uio_in[1];
-wire _unused_pins = uio_in[2];
-wire _unused_pins = uio_in[3];
-wire _unused_pins = uio_in[4];
-wire _unused_pins = uio_in[5];
-wire _unused_pins = uio_in[6];
-wire _unused_pins = uio_in[7];
-wire _unused_pins = uio_out[1];
-wire _unused_pins = uio_out[2];
-wire _unused_pins = uio_out[3];
-wire _unused_pins = uio_out[4];
-wire _unused_pins = uio_out[5];
-wire _unused_pins = uio_out[6];
-wire _unused_pins = uio_out[7];
-wire _unused_pins = uio_oe[1];
-wire _unused_pins = uio_oe[2];
-wire _unused_pins = uio_oe[3];
-wire _unused_pins = uio_oe[4];
-wire _unused_pins = uio_oe[5];
-wire _unused_pins = uio_oe[6];
-wire _unused_pins = uio_oe[7];
+wire _unused_pins = ui_in[7:3];
+wire _unused_pins = uo_in[7:3];
+wire _unused_pins = uio_in[7:0];
+wire _unused_pins = uio_out[7:0];
+wire _unused_pins = uio_oe[7:0];
 
 
 
