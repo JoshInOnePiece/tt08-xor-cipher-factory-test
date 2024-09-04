@@ -11,8 +11,8 @@ module tt_um_franco_xor_top(
     // output oSerial_end   uo_out[2]
 
     input clk,              //ESP32 Input Clock
-    input ui_in[4:0],
-    output uo_out[2:0]
+    input  [4:0] ui_in,
+    output [2:0] uo_out
 
 );
 
