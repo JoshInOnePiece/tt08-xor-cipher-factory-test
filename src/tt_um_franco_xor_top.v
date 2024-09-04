@@ -14,7 +14,8 @@ module tt_um_franco_xor_top(
     input ena,
     input rst_n,
     input  [7:0] ui_in,
-    output [7:0] uo_out
+    output [7:0] uo_out,
+    output [7:0] uio_in
 
 );
 
@@ -43,6 +44,13 @@ wire _unused_pins = uo_in[4];
 wire _unused_pins = uo_in[5];
 wire _unused_pins = uo_in[6];
 wire _unused_pins = uo_in[7];
+wire _unused_pins = uio_in[1];
+wire _unused_pins = uio_in[2];
+wire _unused_pins = uio_in[3];
+wire _unused_pins = uio_in[4];
+wire _unused_pins = uio_in[5];
+wire _unused_pins = uio_in[6];
+wire _unused_pins = uio_in[7];
 
 
 
