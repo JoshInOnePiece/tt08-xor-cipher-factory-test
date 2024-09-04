@@ -1,4 +1,4 @@
-module xor_encryption_top(
+module tt_um_franco_xor_top(
     input iSerial_in,       // Serial DATA in
     input iClk,             // ESP32 Input Clock.
     input iRst,             // Active low reset.
