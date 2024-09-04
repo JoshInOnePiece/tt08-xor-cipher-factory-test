@@ -32,17 +32,25 @@ async def test_project(dut):
     # Set the clock period to 10 us (100 MHz)
     clock = Clock(dut.clk, 10, units="ns")
     cocotb.start_soon(clock.start())
+    dut.iRst.value = 1
     dut.iEn.value = 0
-    dut.iData_in.value = 0
-    dut.iData_in.value = 0
-    dut.iRst.value = 0
     dut.iLoad_key.value = 0
     dut.iLoad_msg.value = 0
+    dut.Serial_in.value = 0
 
-    # Reset
+    reassembled_serial_out = 0;
+    reassembled_counter = 0;
+
+    # Apply Reset
     dut._log.info("Reset")
     dut.iRst.value = 0
     await ClockCycles(dut.clk, 1)
+    dut.iRst.value = 1
+    await ClockCycles(dut.clk, 1)
+
+    # Start Key Loading Process
+    dut.iEn.value = 1
+    dut.iLoad_key.value = 1
     
     await seriallyInput(DUT=dut, dataType=0, data=11011000110010110110001100101101, clockDelay=4)
     await seriallyInput(DUT=dut, dataType=1, data=11011000110010110110001100101101110110001100101101100011001011011101100011001011011000110010110111011000110010110110001100101101110110001100101101100011001011011101100011001011011000110010110111011000110010110110001100101101110110001100101101100011001011011101100011001011011000110010110111011000110010110110001100101101110110001100101101100011001011011101100011001011011000110010110111011000110010110110001100101101110110001100101101100011001011011101100011001011011000110010110111011000110010110110001100101101, clockDelay=4)

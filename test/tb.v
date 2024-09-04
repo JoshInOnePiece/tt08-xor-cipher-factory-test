@@ -12,15 +12,15 @@ module tb();
     end
 
     // Testbench signals
-    reg iEn;
-    reg iData_in;
+    reg iSerial_in;
     reg iClk;
     reg iRst;
+    reg iEn;
     reg iLoad_key;
     reg iLoad_msg;
-    wire oClk_slow;
-    wire oData_out;
-    wire oDone_flag;
+    wire oSerial_out;
+    wire oSerial_start;
+    wire oSerial_end;
 
     // Instantiate the top module
     tt_um_franco_xor_top user_project (
@@ -30,14 +30,14 @@ module tb();
          .VGND(1'b0),
        `endif
 
-        .iEn(iEn),
-        .iData_in(iData_in),
-        .clk(iClk),
-        .iRst(iRst),
-        .iLoad_key(iLoad_key),
-        .iLoad_msg(iLoad_msg),
-        .oClk_slow(oClk_slow),
-        .oData_out(oData_out),
-        .oDone_flag(oDone_flag)
+      .iSerial_in(iSerial_in),
+      .iClk(iClk),
+      .iRst(iRst),
+      .iEn(iEn),
+      .iLoad_key(iLoad_key),
+      .iLoad_msg(iLoad_msg),
+      .oSerial_out(oSerial_out),
+      .oSerial_start(oSerial_start),
+      .oSerial_end(oSerial_end)
     );
 endmodule
