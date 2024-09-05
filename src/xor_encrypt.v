@@ -4,7 +4,7 @@ module xor_encrypt #(parameter MSG_SIZE = 512)(
     input iCan_encrypt,
     input [MSG_SIZE - 1:0] iKey,
     input [MSG_SIZE - 1:0] iMessage,
-    input [$clog2(512):0 ] iMessage_counter,
+    input [($clog2(512)-1):0 ] iMessage_counter,
     input [($clog2(512)-1):0 ] iKey_assemble_counter,
     output reg [MSG_SIZE - 1:0] oCiphertext,
     output reg oEncrypt_done
