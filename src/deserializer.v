@@ -16,8 +16,8 @@ always @(posedge iClk or negedge iRst) begin
     if (!iRst) begin
        // If reset is active (low), reset all the registers
        oData <= 0; 
-       bit_counter <= {($clog2(DATA_SIZE)+1){1'b0}};
-       oBit_counter <= {($clog2(DATA_SIZE)+1){1'b0}};
+       bit_counter <= {($clog2(DATA_SIZE)){1'b0}};
+       oBit_counter <= {($clog2(DATA_SIZE)){1'b0}};
        
     end else if (iEn && iLoading) begin
         // Continue loading if enabled and in loading mode
