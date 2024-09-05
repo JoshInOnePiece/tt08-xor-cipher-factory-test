@@ -30,7 +30,7 @@ wire [511 : 0] oCiphertext;
 
 wire [$clog2(32)  : 0] bit_counter_key;
 wire [$clog2(512) : 0] bit_counter_message;
-wire [($clog2(512)-1) : 0] key_assemble_counter;
+wire [($clog2(512)) : 0] key_assemble_counter;
 
 wire iRst;
 wire can_encrypt;
