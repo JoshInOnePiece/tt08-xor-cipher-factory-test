@@ -17,7 +17,7 @@ async def seriallyInput(DUT, dataType, data, clockDelay):
         for x in range(32):
             DUT.iData_in.value = int(dataString[x])
             await ClockCycles(DUT.iClk, clockDelay)
-
+    
 @cocotb.test()
 async def test_project(dut):
     dut._log.info("Start")
@@ -53,6 +53,12 @@ async def test_project(dut):
     dut.iLoad_msg.value = 1
     await seriallyInput(DUT=dut, dataType=1, data=message, clockDelay=1)
     dut.iLoad_msg.value = 0
+
+    while True:
+        if dut.xor_encryptor.oEncrypt_done == 1:
+            break
+    
+    
 
 
     """""

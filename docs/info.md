@@ -19,6 +19,20 @@ It has three modes of operation:
 
 The following table summarizes the modes:
 
+Input Pins
+1. iSerial_in       ->
+2. iClk             ->
+3. iRst             ->
+4. iEn              ->
+5. iLoad_key        ->
+6. iLoad_msg        ->
+
+Output Pins
+1.  oSerial_out     ->
+2.  oSerial_start   ->
+3.  oSerial_end     ->    
+
+
 | `rst_n` | `sel` | Mode                 | uo_out value | uio pins |
 |---------|-------|----------------------|--------------|----------|
 | 0       | X     | Input mirror         | ui_in        | High-Z   |
