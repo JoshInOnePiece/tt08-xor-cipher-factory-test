@@ -7,10 +7,10 @@ module deserializer #(parameter DATA_SIZE = 32)(
     input iData_in,
     input iLoading,
     output reg [DATA_SIZE - 1 : 0] oData,
-    output reg [$clog2(DATA_SIZE): 0 ] oBit_counter
+    output reg [($clog2(DATA_SIZE)-1): 0 ] oBit_counter
 );
 
-reg [$clog2(DATA_SIZE): 0 ] bit_counter;
+reg [($clog2(DATA_SIZE)-1): 0 ] bit_counter;
 
 always @(posedge iClk or negedge iRst) begin
     if (!iRst) begin
