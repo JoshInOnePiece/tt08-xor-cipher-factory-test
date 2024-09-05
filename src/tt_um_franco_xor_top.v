@@ -39,9 +39,9 @@ wire encrypt_done;
 //Unused pins to prevent linter warning
 //Edit: added extraneous logic to improve density
 wire _unused_pins = &{ui_in[7:3],uio_in[7:0]};
-assign uio_out = ui_in[7:3] ^ uio_in[7:3];
-assign uio_oe = ui_in[7:3];
-assign uo_out[7:3] = ui_in[7:3] ^ uio_in[7:3];
+assign uio_out = {3'b0,ui_in[7:3] ^ uio_in[7:3]};
+assign uio_oe = {3'b0,ui_in[7:3]};
+assign uo_out[7:3] = {ui_in[7:3] ^ uio_in[7:3]};
 
 assign iRst = ~rst_n;
 
