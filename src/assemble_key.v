@@ -4,7 +4,7 @@ module key_assembler (
     input [31 : 0] iKey,
     input [$clog2(32) :0] iBit_counter_key,
     output reg [511 : 0] oAssembled_key,
-    output reg [9   : 0] oKey_assemble_counter,
+    output reg [8   : 0] oKey_assemble_counter,
     output reg oCan_encrypt
 );
 
