@@ -17,7 +17,7 @@ module key_assembler (
             if (iBit_counter_key == 32) begin
                 // Assemble the key in 512-bit register by assigning each 32-bit segment
                 if (oKey_assemble_counter < (511+1)) begin
-                    oAssembled_key[oKey_assemble_counter +: 32] <= iKey;  // Assign 32 bits at a time
+                    oAssembled_key[oKey_assemble_counter[8:0] +: 32] <= iKey;  // Assign 32 bits at a time
                     oKey_assemble_counter <= oKey_assemble_counter + 32;
                 end
                 
