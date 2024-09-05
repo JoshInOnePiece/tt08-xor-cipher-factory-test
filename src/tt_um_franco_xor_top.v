@@ -40,6 +40,7 @@ wire encrypt_done;
 wire _unused_pins = &{ui_in[7:3],uio_in[7:0]};
 assign uio_out = 0;
 assign uio_oe = 0;
+assign uo_out[7:3] = 0;
 
 assign iRst = ~rst_n;
 
@@ -77,7 +78,7 @@ key_assembler key_assembler_inst (
 );
 
 // Instantiate the XOR encryption module
-xor_encrypt #(.KEY_SIZE(32), .MSG_SIZE(512)) xor_encryptor (
+xor_encrypt #(.MSG_SIZE(512)) xor_encryptor (
     .iClk(clk),
     .iRst(iRst),    //iRst
     .iCan_encrypt(can_encrypt),  

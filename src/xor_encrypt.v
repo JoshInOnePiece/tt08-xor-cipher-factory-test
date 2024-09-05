@@ -1,4 +1,4 @@
-module xor_encrypt #(parameter KEY_SIZE = 32, parameter MSG_SIZE = 512)(
+module xor_encrypt #(parameter MSG_SIZE = 512)(
     input iClk,
     input iRst,
     input iCan_encrypt,
